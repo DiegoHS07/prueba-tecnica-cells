@@ -1,4 +1,5 @@
 import { LitElement, html, css } from "lit-element";
+import "./CardEvolution"
 
 export class CardPokemon extends LitElement{
     static get styles() {
@@ -45,13 +46,7 @@ export class CardPokemon extends LitElement{
 
             .evolutions{
                 display:flex;
-                justify-content: center;
-            }
-            
-            .card-evolution{
-                width: 90%;
-                border: 1px solid gray;
-                height: auto;
+                justify-content: space-evenly;
             }
         `;
     }
@@ -59,10 +54,6 @@ export class CardPokemon extends LitElement{
     static get properties() {
         return {
             pokemon: {type: Object},
-            namePokemon: { type: String },
-            imagePokemon: { type: String },
-            typesPokemon: {type: String},
-            evolutionsPokemon: {type: Array},
             showEvolutions: {type: Boolean},
         };
     }
@@ -73,18 +64,18 @@ export class CardPokemon extends LitElement{
         this.showEvolutions = false;
     }
 
-    _showEvolutions(){
-        this.showEvolutions = !this.showEvolutions;
+    _displayInfo(){
+        this.dispatchEvent(
+            new CustomEvent('select_pokemonName',{
+                detail: {pokemon: this.pokemon.name}
+            })
+        );
     }
 
-    _infoEvolution(name){
-        alert(name);
-    }
-    
     render(){
         const pokemon = this.pokemon;
         return html`
-            <div class='card-pokemon' @click='${this._showEvolutions}'>
+            <div class='card-pokemon' @click='${this._displayInfo}'>
                 <div class='principal-pokemon'>
                     <div class='image-pokemon-card'>
                         <img class='img-principal' src='' alt='${pokemon.image}'/>
@@ -96,7 +87,6 @@ export class CardPokemon extends LitElement{
                         </div>
                     </div>
                 </div>
-                
             </div>
                 `;   
             }

@@ -1,5 +1,6 @@
 import { LitElement, html, css } from "lit-element";
 import "./ListCardsPokemon";
+import "./InfoPokemon";
 
 export class Sections extends LitElement{
     static get styles() {
@@ -20,10 +21,36 @@ export class Sections extends LitElement{
         `;
     }
 
+    static get properties() {
+        return {
+            pokemonSelected: { type: String },
+            isBack: {type: Boolean}
+        };
+    }
+
+    constructor(){
+        super();
+        this.pokemonSelected = '';
+    }
+    
+    _showInfo(e){
+        this.pokemonSelected = e.detail.pokemon;
+    }
+
+    _showList(e){
+        this.pokemonSelected = '';
+    }
+
     render(){
         return html`
         <section>
-            <list-pokemons></list-pokemons>
+            ${
+                this.pokemonSelected != '' 
+                    ? 
+                        html`<info-pokemon @back_list='${this._showList}' .pokemonNameSelected='${this.pokemonSelected}'></info-pokemon>` 
+                    : 
+                        html`<list-pokemons @select_pokemonName="${this._showInfo}"></list-pokemons>`
+            }
         </section>
         `;
     }

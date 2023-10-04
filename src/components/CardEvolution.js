@@ -1,4 +1,4 @@
-import { LitElement, html, css } from "lit-element";
+import { LitElement, html, css, eventOptions } from "lit-element";
 
 export class CardEvolution extends LitElement{
     static get styles() {
@@ -54,9 +54,12 @@ export class CardEvolution extends LitElement{
         this.pokemon = {};
     }
 
-
     _infoEvolution(){
-        console.log(this.pokemon)
+        this.dispatchEvent(
+            new CustomEvent('select_evolution',{
+                detail: { pokemon: this.pokemon },
+            })
+        );
     }
 
     render(){

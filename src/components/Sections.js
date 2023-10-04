@@ -37,7 +37,7 @@ export class Sections extends LitElement{
         this.pokemonSelected = e.detail.pokemon;
     }
 
-    _showList(e){
+    _showList(){
         this.pokemonSelected = '';
     }
 

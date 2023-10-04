@@ -24,35 +24,43 @@ export class Sections extends LitElement{
     static get properties() {
         return {
             pokemonSelected: { type: String },
-            isBack: {type: Boolean}
+            isBack: {type: Boolean},
+            template: {type: Object},
         };
     }
 
     constructor(){
         super();
         this.pokemonSelected = '';
+        this.template =  html`
+            <h2>List Pokemon</h2>
+            <list-pokemons @select_pokemonName="${this._showInfo}"></list-pokemons>
+        `;
     }
     
     _showInfo(e){
         this.pokemonSelected = e.detail.pokemon;
+        this.template = html`
+            <info-pokemon 
+                @back_list='${this._showList}' 
+                .pokemonNameSelected='${this.pokemonSelected}'>
+            </info-pokemon>
+        `;
     }
 
     _showList(){
-        this.pokemonSelected = '';
+        this.template =  html`
+            <h2>List Pokemon</h2>
+            <list-pokemons @select_pokemonName="${this._showInfo}"></list-pokemons>
+        `;
     }
 
     render(){
         return html`
-        <section>
-            ${
-                this.pokemonSelected != '' 
-                    ? 
-                        html`<info-pokemon @back_list='${this._showList}' .pokemonNameSelected='${this.pokemonSelected}'></info-pokemon>` 
-                    : 
-                        html`<list-pokemons @select_pokemonName="${this._showInfo}"></list-pokemons>`
-            }
-        </section>
-        `;
+            <section id='content' name='content'>
+                ${this.template}
+            </section>
+        `
     }
 
 }

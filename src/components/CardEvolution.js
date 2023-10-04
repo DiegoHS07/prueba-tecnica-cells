@@ -1,4 +1,4 @@
-import { LitElement, html, css, eventOptions } from "lit-element";
+import { LitElement, html, css } from "lit-element";
 
 export class CardEvolution extends LitElement{
     static get styles() {
@@ -64,7 +64,7 @@ export class CardEvolution extends LitElement{
 
     render(){
         return html`
-            <div class='card-evolution' @click='${this._infoEvolution()}'>
+            <div class='card-evolution' @click='${this._infoEvolution}'>
                 <div class='image-pokemon-card'>
                     <img src='' alt='${this.pokemon.image}'/>
                 </div>

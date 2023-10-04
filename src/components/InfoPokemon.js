@@ -1,5 +1,6 @@
 import { LitElement, html, css } from "lit-element";
 import { getPokemon } from "../services/pokemon";
+import "./InfoEvolution";
 
 export class InfoPokemon extends LitElement{
 
@@ -56,8 +57,9 @@ export class InfoPokemon extends LitElement{
         return {
             pokemonNameSelected: { type: String },
             infoPokemon: { type: Object },
-            selectedEvolution : {type: String},
+            selectedEvolution : {type: Object},
             checkPokemonExist: {type: Boolean},
+            templateInfo: {type: Object}
         };
     }
 
@@ -65,13 +67,63 @@ export class InfoPokemon extends LitElement{
         super();
         this.pokemonNameSelected = '';
         this.infoPokemon = {};
-        this.selectedEvolution = '';
+        this.selectedEvolution = {};
         this.checkPokemonExist = false;
     }
 
     async firstUpdated(){
         const responseGetPokemon = await getPokemon(this.pokemonNameSelected);
         this.infoPokemon = responseGetPokemon[0];
+
+        this.templateInfo = html`
+            <div class='info_pokemon'>
+                <h2>Information ${this.infoPokemon.name}</h2>
+                <div class='modal' id='modal'>
+                    <p>This is a modal informative about if </br> pokemon is duplicate</p></br>
+                    <span @click='${this._changeCheckBox}'>Close</span>
+                </div>
+                <div class='info_pokemon'>
+                    <form class='form-data-pokemon' @submit='${this._submitFormData}'>
+                        <div>
+                            <label>Name: </label>
+                                <input id='namePokemon' name='namePokemon' type='text' value='${this.infoPokemon.name}'/>
+                        </div>
+                        <div>
+                            <label>Image: </label>
+                            <input id='imagePokemon' name='imagePokemon' type='text' value='${this.infoPokemon.image}'/>
+                        </div>
+                        <div>
+                            <label>Types: </label>
+                            <input id='typesPokemon' name='typesPokemon' type='text' value='${this.infoPokemon.type}'/>
+                        </div>
+                        <input type='submit' value='Change Data'>
+                    </form>
+                    <div class='evolutions'>
+                        <label>Evolutions: </label></br>
+                        ${
+                            this.infoPokemon.evolutions && this.infoPokemon.evolutions.length > 0
+                            ? this.infoPokemon.evolutions.map((evolution) => html`
+                                <evolution-card 
+                                    .pokemon='${evolution}' 
+                                    @select_evolution='${this._selectedEvolution}'
+                                    @back_list='${this._clickBack}'
+                                >
+                                </evolution-card>
+                            `)
+                            : html`<span>The pokemon no have evolution</span>`
+                        }
+                    </div>
+                    <div>
+                        <input type="checkbox" id="cboxPokemonExist" .value='${this.checkPokemonExist}' 
+                        @change='${this._changeCheckBox}'/>
+                        <label for="cboxPokemonExist">show if pokemon is duplicate!</label>
+                    </div>
+                    <div>
+                        <button @click='${this._clickBack}'>Back</button>
+                    </div>
+                </div>
+            </div>
+        `;
     }
 
     _clickBack(){
@@ -83,7 +135,10 @@ export class InfoPokemon extends LitElement{
     }
 
     _selectedEvolution(e){
-        this.select_evolution = 'Diego'
+        this.selectedEvolution = e.detail.pokemon;
+        this.templateInfo = html`
+            <info-evolution .evolutionNameSelected="${this.selectedEvolution}"></info-evolution>
+        `;
     }
 
     _changeCheckBox(){
@@ -122,51 +177,10 @@ export class InfoPokemon extends LitElement{
     }
 
     render(){
-        const pokemon = this.infoPokemon;
-        console.log(this.selectedEvolution);
         return html`
-            <div class='info_pokemon'>
-                <div class='modal' id='modal'>
-                    <p>This is a modal informative about if </br> pokemon is duplicate</p></br>
-                    <span @click='${this._changeCheckBox}'>Close</span>
-                </div>
-                <div class='info_pokemon'>
-                    <form class='form-data-pokemon' @submit='${this._submitFormData}'>
-                        <div>
-                            <label>Name: </label>
-                                <input id='namePokemon' name='namePokemon' type='text' value='${this.infoPokemon.name}'/>
-                        </div>
-                        <div>
-                            <label>Image: </label>
-                            <input id='imagePokemon' name='imagePokemon' type='text' value='${this.infoPokemon.image}'/>
-                        </div>
-                        <div>
-                            <label>Types: </label>
-                            <input id='typesPokemon' name='typesPokemon' type='text' value='${this.infoPokemon.type}'/>
-                        </div>
-                        <input type='submit' value='Change Data'>
-                    </form>
-                    <div class='evolutions'>
-                        <label>Evolutions: </label></br>
-                        ${
-                            pokemon.evolutions && pokemon.evolutions.length > 0
-                            ? pokemon.evolutions.map((evolution) => html`
-                                <evolution-card .pokemon='${evolution}' @select_evolution='${this._selectedEvolution}'></evolution-card>
-                            `)
-                            : html`<span>The pokemon no have evolution</span>`
-                        }
-                    </div>
-                    <div>
-                        <input type="checkbox" id="cboxPokemonExist" .value='${this.checkPokemonExist}' 
-                        @change='${this._changeCheckBox}'/>
-                        <label for="cboxPokemonExist">show if pokemon is duplicate!</label>
-                    </div>
-                    <div>
-                        <button @click='${this._clickBack}'>Back</button>
-                    </div>
-                </div>
-            </div>
-        `;
+        <div>
+            ${this.templateInfo}
+        </div>`;  
     }
 }
 

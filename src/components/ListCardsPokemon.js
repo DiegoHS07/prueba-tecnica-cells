@@ -37,8 +37,6 @@ export class ListCardsPokemon extends LitElement{
         this.dispatchEvent(
             new CustomEvent('select_pokemonName',{
                 detail: { pokemon: this.select_pokemonName },
-                bubbles: true,
-                composed: true
             })
         );
     }

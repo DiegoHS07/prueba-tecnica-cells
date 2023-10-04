@@ -152,7 +152,6 @@ export class InfoPokemon extends LitElement{
             modal.classList.add('active');
         }else{
             modal.classList.remove('active');
-            console.log("antes",this.checkPokemonExist);
             this.checkPokemonExist = false;
         }
     }

@@ -2,6 +2,25 @@ import { LitElement, html, css } from "lit-element";
 
 export class InfoEvolution extends LitElement{
 
+    static get styles() {
+        return css`
+            .info_pokemon{
+                display: flex;
+                flex-direction: column;
+                justify-content: space-around;
+                align-items: center;
+                gap: 50px;
+            }
+            .form-data-pokemon{
+                display: flex;
+                flex-direction: column;
+                justify-content: space-around;
+                align-items: center;
+                gap: 5px;
+            }
+        `
+    }
+
     static get properties() {
         return {
             evolutionNameSelected : {type: Object},
@@ -25,7 +44,7 @@ export class InfoEvolution extends LitElement{
         return html`
             <h2>Information ${this.evolutionNameSelected.name}</h2>    
             <div class='info_pokemon'>
-                <form >
+                <form class='form-data-pokemon'>
                     <div>
                         <label>Name: </label>
                             <input id='namePokemon' name='namePokemon' type='text' value='${this.evolutionNameSelected.name}'/>
@@ -41,6 +60,21 @@ export class InfoEvolution extends LitElement{
                     <input type='submit' value='Change Data'>
                 </form>
             </div>
+            <div class='evolutions'>
+                        <label>Evolutions: </label></br>
+                        ${
+                            this.evolutionNameSelected.evolutions && this.evolutionNameSelected.evolutions.length > 0
+                            ? this.evolutionNameSelected.evolutions.map((evolution) => html`
+                                <evolution-card 
+                                    .pokemon='${evolution}' 
+                                    @select_evolution='${this._selectedEvolution}'
+                                    @back_list='${this._clickBack}'
+                                >
+                                </evolution-card>
+                            `)
+                            : html`<span>The pokemon no have evolution</span>`
+                        }
+                    </div>
             <div>
                 <button>Back</button>
             </div>

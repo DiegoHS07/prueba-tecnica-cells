@@ -127,7 +127,7 @@ export class InfoPokemon extends LitElement{
         return html`
             <div class='info_pokemon'>
                 <div class='modal' id='modal'>
-                    <p>This is a modal informative about if pokemon is duplicate</p></br>
+                    <p>This is a modal informative about if </br> pokemon is duplicate</p></br>
                     <span @click='${this._changeCheckBox}'>Close</span>
                 </div>
                 <div class='info_pokemon'>

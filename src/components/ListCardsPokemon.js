@@ -1,7 +1,6 @@
 import { LitElement, html, css } from "lit-element";
 import "./CardPokemon";
-
-import {getAllPokemon} from "./../services/pokemon";
+import "./DataManager";
 
 export class ListCardsPokemon extends LitElement{
     static get styles() {
@@ -27,10 +26,6 @@ export class ListCardsPokemon extends LitElement{
         this.select_pokemonName = ''
     }
 
-    async firstUpdated(){
-        const responseAllPokemon = await getAllPokemon();
-        this.listPokemon = responseAllPokemon;
-    }
 
     _selectPokemon(e){
         this.select_pokemonName = e.detail.pokemon
@@ -41,10 +36,15 @@ export class ListCardsPokemon extends LitElement{
         );
     }
 
+
+    _listPokemon(e){
+        this.listPokemon = e.detail.response;
+    }
     
     render(){
         return html`
         <div class='list-pokemons'>
+            <data-manager @response_pokemon='${this._listPokemon}'></data-manager>
             ${this.listPokemon.map((pokemon) =>
                 html`
                 <card-pokemon 

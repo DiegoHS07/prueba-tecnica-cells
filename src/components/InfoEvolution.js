@@ -24,6 +24,9 @@ export class InfoEvolution extends LitElement{
     static get properties() {
         return {
             evolutionNameSelected : {type: Object},
+
+
+            
         };
     }
 
